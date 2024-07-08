@@ -1,17 +1,22 @@
 from rest_framework import viewsets
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 
 from .models import Achievement, Cat, User
 from .permissions import OwnerOrReadOnly, ReadOnly
 from .serializers import AchievementSerializer, CatSerializer, UserSerializer
+from .throttling import WorkingHoursThrottling
 
 
 class CatViewSet(viewsets.ModelViewSet):
     queryset = Cat.objects.all()
     serializer_class = CatSerializer
     permission_classes = (OwnerOrReadOnly,)
+    throttle_classes = (
+        WorkingHoursThrottling,
+        AnonRateThrottle,
+        ScopedRateThrottle,
+    )
 #    throttle_scope = 'low_request'
-#    throttle_classes = (AnonRateThrottle,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
