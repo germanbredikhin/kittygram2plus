@@ -143,7 +143,10 @@ REST_FRAMEWORK = {
         'user': '10000/day',
         'anon': '10/minute',
         'low_request': '1/minute',
-    }
+    },
+#    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'cats.pagination.CustomPagination',
+    'PAGE_SIZE': 1,
 }
 
 SIMPLE_JWT = {
